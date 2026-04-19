@@ -1,1266 +1,139 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Сборник RP-отыгровок МЗ</title>
-<style>
-:root {
-  --bg: #1a1d29;
-  --card: #242836;
-  --border: #2d3142;
-  --hover: #35394a;
-  --text: #e0e0e0;
-  --text-muted: #b0b3c7;
-  --accent: #e74c3c;
-  --accent-light: #3498db;
-  --success: #27ae60;
-  --code-bg: #1e2130;
-  --shadow: rgba(0,0,0,0.4);
-}
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>📻 Помощник по докладам РП</title>
+  <style>
+    :root {
+      --bg: #0f1115; --card: #1a1d24; --accent: #3b82f6; --accent-hover: #2563eb;
+      --text: #e2e8f0; --muted: #94a3b8; --border: #2d3748; --success: #10b981;
+    }
+    * { box-sizing: border-box; outline: none; }
+    body { background: var(--bg); color: var(--text); font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 20px; }
+    .container { max-width: 1000px; margin: 0 auto; }
+    h1 { text-align: center; color: var(--accent); margin-bottom: 10px; font-weight: 700; }
+    .subtitle { text-align: center; color: var(--muted); margin-bottom: 25px; font-size: 0.9rem; }
+    
+    .settings { background: var(--card); padding: 15px; border-radius: 12px; display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin-bottom: 25px; border: 1px solid var(--border); }
+    .setting-group { display: flex; flex-direction: column; }
+    .setting-group label { font-size: 0.8rem; color: var(--muted); margin-bottom: 5px; }
+    .setting-group input, .setting-group select { background: #232730; border: 1px solid var(--border); color: var(--text); padding: 9px 10px; border-radius: 8px; font-size: 0.9rem; transition: 0.2s; }
+    .setting-group input:focus, .setting-group select:focus { border-color: var(--accent); }
+    
+    .section { margin-bottom: 22px; }
+    .section-title { font-size: 1.05rem; font-weight: 600; color: var(--accent); margin-bottom: 10px; padding-bottom: 6px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    
+    .report-item { background: var(--card); padding: 12px; margin-bottom: 8px; border-radius: 10px; display: flex; justify-content: space-between; align-items: center; gap: 12px; border: 1px solid var(--border); transition: 0.2s; }
+    .report-item:hover { border-color: #475569; }
+    .report-text { font-family: 'Consolas', 'Courier New', monospace; font-size: 0.95rem; word-break: break-word; flex: 1; line-height: 1.4; }
+    .copy-btn { background: var(--accent); color: #fff; border: none; padding: 10px 16px; border-radius: 8px; cursor: pointer; font-weight: 600; font-size: 0.85rem; transition: 0.2s; white-space: nowrap; }
+    .copy-btn:hover { background: var(--accent-hover); }
+    .copy-btn.copied { background: var(--success); color: #fff; }
 
-[data-theme="light"] {
-  --bg: #f3f4f6;
-  --card: #ffffff;
-  --border: #d1d5db;
-  --hover: #e5e7eb;
-  --text: #111827;
-  --text-muted: #4b5563;
-  --accent: #dc2626;
-  --accent-light: #2563eb;
-  --success: #10b981;
-  --code-bg: #f9fafb;
-  --shadow: rgba(0,0,0,0.1);
-}
-
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body {
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  padding: 20px;
-  line-height: 1.5;
-  transition: background 0.3s ease, color 0.3s ease;
-}
-
-.container { max-width: 1000px; margin: 0 auto; }
-
-/* Header & Theme Toggle */
-.header {
-  background: var(--card);
-  padding: 25px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  margin-bottom: 20px;
-  position: relative;
-  transition: background 0.3s, border-color 0.3s;
-}
-.header h1 {
-  color: var(--accent);
-  font-size: 22px;
-  margin-bottom: 15px;
-  text-align: center;
-  font-weight: 600;
-}
-.theme-toggle {
-  position: absolute;
-  top: 20px;
-  right: 20px;
-  background: transparent;
-  border: 2px solid var(--border);
-  color: var(--text);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  cursor: pointer;
-  font-size: 18px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s;
-}
-.theme-toggle:hover { background: var(--hover); transform: scale(1.05); }
-.header-img {
-  width: 100%;
-  max-width: 250px;
-  height: auto;
-  display: block;
-  margin: 0 auto 20px;
-  border-radius: 8px;
-  object-fit: contain;
-}
-.description {
-  background: var(--code-bg);
-  padding: 18px;
-  border-radius: 6px;
-  margin: 15px 0;
-  border-left: 3px solid var(--accent);
-  line-height: 1.6;
-  color: var(--text-muted);
-  font-size: 14px;
-  transition: background 0.3s;
-}
-.description a { color: var(--accent-light); text-decoration: none; }
-.description a:hover { text-decoration: underline; }
-.responsibility {
-  background: var(--code-bg);
-  padding: 18px;
-  border-radius: 6px;
-  text-align: center;
-  font-weight: 500;
-  margin-top: 15px;
-  border-top: 2px solid var(--accent);
-  border-bottom: 2px solid var(--accent);
-  font-size: 14px;
-  line-height: 1.8;
-  transition: background 0.3s;
-}
-.responsibility a { color: var(--accent-light); text-decoration: none; font-weight: 600; }
-.responsibility a:hover { text-decoration: underline; }
-
-/* Search */
-.search-bar { margin-bottom: 20px; }
-.search-bar input {
-  width: 100%;
-  padding: 14px 18px;
-  border-radius: 10px;
-  border: 1px solid var(--border);
-  background: var(--card);
-  color: var(--text);
-  font-size: 15px;
-  outline: none;
-  transition: border-color 0.3s, box-shadow 0.3s, background 0.3s;
-}
-.search-bar input:focus {
-  border-color: var(--accent-light);
-  box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.15);
-}
-
-/* Accordion */
-.accordion {
-  background: var(--card);
-  border-radius: 10px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-  transition: background 0.3s, border-color 0.3s;
-}
-.accordion-item { border-bottom: 1px solid var(--border); }
-.accordion-item:last-child { border-bottom: none; }
-
-.accordion-header, .submenu-header {
-  background: var(--border);
-  color: var(--text);
-  padding: 16px 20px;
-  cursor: pointer;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  transition: background 0.2s;
-  font-weight: 500;
-  user-select: none;
-}
-.accordion-header { font-size: 15px; }
-.submenu-header { font-size: 14px; border-left: 3px solid var(--accent); border-radius: 6px; margin: 8px 0; padding: 12px 15px; }
-.accordion-header:hover, .submenu-header:hover { background: var(--hover); }
-.accordion-header.active { background: var(--accent); color: white; }
-.submenu-header.active { background: var(--hover); border-left-color: var(--accent-light); }
-
-.accordion-icon, .submenu-icon { font-size: 18px; transition: transform 0.3s ease; }
-.accordion-header.active .accordion-icon, .submenu-header.active .submenu-icon { transform: rotate(45deg); }
-
-.accordion-content, .submenu-content {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.35s cubic-bezier(0.4, 0, 0.2, 1);
-  background: var(--code-bg);
-}
-.submenu-content { margin-left: 8px; }
-.accordion-content.active, .submenu-content.active { max-height: var(--mh, 25000px); }
-
-.content-inner { padding: 18px 20px 22px; }
-
-/* Play Lines */
-.play-section {
-  background: var(--card);
-  padding: 16px;
-  margin: 12px 0;
-  border-radius: 8px;
-  border-left: 3px solid var(--accent-light);
-  transition: background 0.3s, border-color 0.3s;
-}
-.play-section h4 {
-  color: var(--accent-light);
-  margin-bottom: 12px;
-  font-size: 14px;
-  font-weight: 600;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-.copy-all-btn {
-  background: transparent;
-  border: 1px solid var(--accent-light);
-  color: var(--accent-light);
-  padding: 5px 12px;
-  border-radius: 6px;
-  cursor: pointer;
-  font-size: 12px;
-  font-weight: 500;
-  transition: all 0.2s;
-}
-.copy-all-btn:hover { background: var(--accent-light); color: white; }
-
-.play-line {
-  display: flex;
-  align-items: center;
-  background: var(--bg);
-  padding: 12px 14px;
-  border-radius: 6px;
-  margin: 8px 0;
-  border: 1px solid var(--border);
-  font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
-  font-size: 13px;
-  color: var(--text-muted);
-  transition: background 0.3s, border-color 0.3s;
-}
-.play-line-text {
-  flex: 1;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  line-height: 1.5;
-  padding-right: 12px;
-  cursor: pointer;
-  position: relative;
-  border-radius: 4px;
-  transition: background 0.2s;
-}
-.play-line-text:hover { background: rgba(52, 152, 219, 0.12); }
-.play-line-text.copied { background: rgba(39, 174, 96, 0.25); color: var(--text); }
-.play-line-text.copied::after {
-  content: '✅';
-  position: absolute;
-  right: 10px;
-  top: 50%;
-  transform: translateY(-50%);
-  animation: fadeOut 0.8s forwards;
-}
-@keyframes fadeOut { to { opacity: 0; } }
-
-.section-number {
-  background: var(--accent);
-  color: white;
-  padding: 3px 10px;
-  border-radius: 5px;
-  margin-right: 12px;
-  font-size: 14px;
-  font-weight: 600;
-}
-.accordion-header.active .section-number { background: white; color: var(--accent); }
-
-.note { font-size: 12px; color: var(--text-muted); margin: 10px 0 4px; font-style: italic; opacity: 0.8; }
-.branch-label {
-  color: var(--accent);
-  font-size: 13px;
-  font-weight: 600;
-  margin: 14px 0 6px;
-  padding-left: 6px;
-  border-left: 2px solid var(--accent);
-}
-
-/* Notification */
-.notification {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: var(--success);
-  color: white;
-  padding: 12px 20px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px var(--shadow);
-  display: none;
-  animation: slideIn 0.3s cubic-bezier(0.4,0,0.2,1);
-  z-index: 1000;
-  font-weight: 500;
-}
-@keyframes slideIn {
-  from { transform: translateX(400px); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-@media (max-width: 768px) {
-  .header h1 { font-size: 19px; }
-  .accordion-header, .submenu-header { font-size: 14px; padding: 14px 15px; }
-  body { padding: 12px; }
-  .header, .accordion { padding: 12px; }
-  .header-img { max-width: 180px; }
-  .play-section h4 { flex-direction: column; align-items: flex-start; }
-  .copy-all-btn { margin-top: 6px; }
-}
-</style>
+    @media (max-width: 650px) {
+      .settings { grid-template-columns: 1fr; }
+      .report-item { flex-direction: column; align-items: stretch; text-align: center; }
+      .copy-btn { width: 100%; }
+    }
+  </style>
 </head>
 <body>
-<div class="container">
-  <div class="header">
-    <button class="theme-toggle" id="themeToggle" title="Переключить тему">🌙</button>
-    <h1>🏥 Общий сборник RP-отыгровок министерства здравоохранения</h1>
-    <img src="https://i.imgur.com/bxBS2Nh.png" alt="Ministry of Health" class="header-img" onerror="this.style.display='none'">
-    <div class="description">
-      <strong style="color: var(--accent);">📋 О сборнике:</strong><br><br>
-      Данный раздел предназначен для сотрудников МЗ с ассортиментом RP-отыгровок.
-      Сборник является официальным, и любой сотрудник вправе взять отсюда ту отыгровку,
-      которую посчитает нужным. Сотрудник должен использовать данный сборник.
-      Также не запрещено самостоятельно отыгрывать, но не нарушая
-      <a href="https://forum.gtaprovince.ru/topic/384712-manual-po-role-play-sostavlyayuschey-vseh-serverov" target="_blank">мануал RP-отыгровок</a>.
-      Здесь также описано краткое пояснение по необходимости.
-    </div>
-    <div class="responsibility">
-      <strong style="color: var(--accent);">⚖️ Ответственность</strong><br>
-      За правильность написания и актуализацию всех данных отыгровок несёт лично<br>
-      Главный следящий за министерством здравоохранения -
-      <a href="https://forum.gtaprovince.ru/profile/38502-nick-kotik" target="_blank">Nick_Kotik</a>
-    </div>
-  </div>
-
-  <div class="search-bar">
-    <input type="text" id="searchInput" placeholder="🔍 Поиск по отыгровкам (например: рентген, гипс, укол)...">
-  </div>
-
-  <div class="accordion" id="accordion">
-    <!-- SECTION 1 -->
-    <div class="accordion-item">
-      <div class="accordion-header"><div style="display:flex;align-items:center"><span class="section-number">1</span>Обязательные отыгровки</div><span class="accordion-icon">+</span></div>
-      <div class="accordion-content"><div class="content-inner">
-        <div class="submenu">
-          <div class="submenu-header"><span>💬 Разговоры в /r, /ro, /d</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 КПК — разговор по рации <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do КПК висит на поясе.</span></div>
-              <div class="play-line"><span class="play-line-text">me снял КПК с пояса и, зажав кнопку, начал что-то говорить в него</span></div>
-              <div class="play-line"><span class="play-line-text">*Что-то сообщаете в RP-рацию*</span></div>
-              <div class="play-line"><span class="play-line-text">me отжав кнопку, закончил что-то говорить в КПК и повесил его обратно на пояс</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>📞 Принятие вызова</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Приём вызова от диспетчера <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do КПК висит на поясе.</span></div>
-              <div class="play-line"><span class="play-line-text">me снял КПК с пояса и, зажав кнопку, связался с диспетчером</span></div>
-              <div class="play-line"><span class="play-line-text">me принял вызов от диспетчера и, отжав кнопку, повесил КПК обратно на пояс</span></div>
-              <div class="play-line"><span class="play-line-text">/to *ID вызова* (без звёздочек)</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>🚑 Вытаскивание/затаскивание каталок</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 АСМП <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <p style="color:var(--text-muted);font-size:12px;margin:8px 0;">◂ Вытаскивание:</p>
-              <div class="play-line"><span class="play-line-text">me разжал фиксаторы и, схватившись руками за ручки каталок, вытащил их из АСМП на землю</span></div>
-              <p style="color:var(--text-muted);font-size:12px;margin:8px 0;">◂ Затаскивание:</p>
-              <div class="play-line"><span class="play-line-text">me аккуратно затолкал каталки в АСМП и зажал фиксаторы</span></div>
-              <p class="note">📦 Tab или - getcouch</p>
-            </div>
-            <div class="play-section">
-              <h4>📌 ВСМП <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <p style="color:var(--text-muted);font-size:12px;margin:8px 0;">◂ Вытаскивание:</p>
-              <div class="play-line"><span class="play-line-text">me разжал фиксаторы и, схватившись руками за ручки каталок, вытащил их из ВСМП на землю</span></div>
-              <p style="color:var(--text-muted);font-size:12px;margin:8px 0;">◂ Затаскивание:</p>
-              <div class="play-line"><span class="play-line-text">me аккуратно затолкал каталки в ВСМП и зажал фиксаторы</span></div>
-              <p class="note">📦 Tab или - getcouch</p>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>🛏️ Перекладывание пациента</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Если пациент не может ходить / 0 HP <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do Под каталкой можно заметить небольшой красный рычажок.</span></div>
-              <div class="play-line"><span class="play-line-text">me дёрнул рычаг на себя</span></div>
-              <div class="play-line"><span class="play-line-text">do Внутри каталки послышался щелчок и она опустилась до нужного уровня.</span></div>
-              <p class="note">🔄 Tab или - loadcouch</p>
-              <div class="play-line"><span class="play-line-text">me аккуратно переложил пострадавшего на каталку, после чего вернул её на прежний уровень</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>🏥 Госпитализация</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 АСМП <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do Реаниматолог с санитарами стоят со свободными каталками у автомобиля СМП.</span></div>
-              <div class="play-line"><span class="play-line-text">do Сотрудники, открыв двери СМП, выкатили каталки и переложили пострадавшего на другие.</span></div>
-              <div class="play-line"><span class="play-line-text">hospital</span></div>
-              <div class="play-line"><span class="play-line-text">do Санитар загрузил каталки в СМП.</span></div>
-              <div class="play-line"><span class="play-line-text">do Пострадавший госпитализирован сотрудниками в операционную.</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 ВСМП <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do Реаниматолог с санитарами стоят со свободными каталками у вертолёта СМП.</span></div>
-              <div class="play-line"><span class="play-line-text">do Сотрудники, открыв двери СМП, выкатили каталки и переложили пострадавшего на другие.</span></div>
-              <div class="play-line"><span class="play-line-text">hospital</span></div>
-              <div class="play-line"><span class="play-line-text">do Санитар загрузил каталки в СМП.</span></div>
-              <div class="play-line"><span class="play-line-text">do Пострадавший госпитализирован сотрудниками в операционную.</span></div>
-            </div>
-          </div>
-        </div>
-      </div></div>
-    </div>
-
-    <!-- SECTION 2 -->
-    <div class="accordion-item">
-      <div class="accordion-header"><div style="display:flex;align-items:center"><span class="section-number">2</span>Мед.комиссия МВД / Комиссионные обследования</div><span class="accordion-icon">+</span></div>
-      <div class="accordion-content"><div class="content-inner">
-        <div class="submenu">
-          <div class="submenu-header"><span>🩺 Мед.комиссия МВД</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Полный осмотр <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">say Сейчас я Вам проведу медицинский осмотр.</span></div>
-              <div class="play-line"><span class="play-line-text">say Для начала мне нужна Ваша медицинская карта.</span></div>
-              <div class="play-line"><span class="play-line-text">say В неё будут записаны результаты комиссии.</span></div>
-              <div class="play-line"><span class="play-line-text">do Рядом стоит стол. Если он отсутствует в кабинете!</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв медицинскую карту в руку, раскрыл её на последней странице с текстом и положил её на стол</span></div>
-              <div class="play-line"><span class="play-line-text">say Хорошо. Теперь снимайте обувь и бронежилет, если он есть.</span></div>
-              <div class="play-line"><span class="play-line-text">say Сейчас зафиксируем показатели роста и веса.</span></div>
-              <div class="play-line"><span class="play-line-text">do Весы и измерительный столб до 250 сантиметров стоят в углу комнаты.</span></div>
-              <div class="play-line"><span class="play-line-text">say Становитесь на весы.</span></div>
-              <div class="play-line"><span class="play-line-text">me посмотрел на весы и зафиксировал показатели веса</span></div>
-              <div class="play-line"><span class="play-line-text">me подтянул измерительный прибор к голове сотрудника и зафиксировал показатели роста</span></div>
-              <div class="play-line"><span class="play-line-text">say Хорошо, можете обуваться.</span></div>
-              <div class="play-line"><span class="play-line-text">do На столе лежат ручка, тонометр и указка.</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв ручку со стола, записал показатели веса и роста в медицинскую карту сотрудника</span></div>
-              <div class="play-line"><span class="play-line-text">me отложил ручку на стол</span></div>
-              <div class="play-line"><span class="play-line-text">say Теперь измерим Ваше давление.</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола в руку тонометр и расстегнул манжету</span></div>
-              <div class="play-line"><span class="play-line-text">say Присаживайтесь на стул и дайте мне Вашу любую свободную руку.</span></div>
-              <div class="play-line"><span class="play-line-text">me надел манжету на руку сотрудника и застегнул её</span></div>
-              <div class="play-line"><span class="play-line-text">me нажал на кнопку включения тонометра и начал накачивать манжету</span></div>
-              <div class="play-line"><span class="play-line-text">do На тонометре показалось число 220.</span></div>
-              <div class="play-line"><span class="play-line-text">me перестал накачивать манжету</span></div>
-              <div class="play-line"><span class="play-line-text">do Через несколько секунд манжета слегка расширилась.</span></div>
-              <div class="play-line"><span class="play-line-text">do На экране тонометра появилось давление.</span></div>
-              <div class="play-line"><span class="play-line-text">me посмотрел на экран тонометра и зафиксировал показатели давления</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв ручку со стола, записал показатели давления в медицинскую карту сотрудника</span></div>
-              <div class="play-line"><span class="play-line-text">me отложил ручку на стол</span></div>
-              <div class="play-line"><span class="play-line-text">me расстегнул манжету и выключил тонометр</span></div>
-              <div class="play-line"><span class="play-line-text">me положил тонометр на стол</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола в руку указку</span></div>
-              <div class="play-line"><span class="play-line-text">do На стене висит таблица Сивцева.</span></div>
-              <div class="play-line"><span class="play-line-text">say Осталось последнее, проверим Ваше зрение.</span></div>
-              <div class="play-line"><span class="play-line-text">me показал указкой на букву *БУКВА*</span></div>
-              <div class="play-line"><span class="play-line-text">say Это какая буква?</span></div>
-              <div class="play-line"><span class="play-line-text">me положил указку на стол</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола ручку</span></div>
-              <div class="play-line"><span class="play-line-text">me записал показатели зрения сотрудника в медицинскую карту</span></div>
-              <div class="play-line"><span class="play-line-text">me отложил ручку на стол</span></div>
-              <div class="play-line"><span class="play-line-text">say На этом всё, можете забирать медицинскую карту и Вы свободны.</span></div>
-              <div class="play-line"><span class="play-line-text">say Всего Вам доброго, не болейте!</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>🔍 Комиссионные обследования</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>🫁 Проверка шумов в лёгких <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do Стетоскоп висит на шее. Если визуально отсутствует на скине!</span></div>
-              <div class="play-line"><span class="play-line-text">me сняв стетоскоп с шеи, вставил наконечники в уши</span></div>
-              <div class="play-line"><span class="play-line-text">me взял головку стетоскопа</span></div>
-              <div class="play-line"><span class="play-line-text">say Поднимайте куртку с футболкой.</span></div>
-              <div class="play-line"><span class="play-line-text">me прислонил головку стетоскопа к груди пациента в районе лёгких</span></div>
-              <div class="play-line"><span class="play-line-text">say Дышите.</span></div>
-              <div class="play-line"><span class="play-line-text">say Не дышите.</span></div>
-              <div class="play-line"><span class="play-line-text">say Поворачивайтесь спиной ко мне.</span></div>
-              <div class="play-line"><span class="play-line-text">me прислонил головку стетоскопа к груди пациента в районе лёгких со спины</span></div>
-              <div class="play-line"><span class="play-line-text">do Шумы в лёгких обнаружены?</span></div>
-              <div class="play-line"><span class="play-line-text">say Можете одеваться.</span></div>
-              <div class="play-line"><span class="play-line-text">me вытащив ушные наконечники с ушей, повесил стетоскоп на шею</span></div>
-            </div>
-            <div class="play-section">
-              <h4>❤️ Проверка шумов в сердце <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do Стетоскоп висит на шее. Если визуально отсутствует на скине!</span></div>
-              <div class="play-line"><span class="play-line-text">me сняв стетоскоп с шеи, вставил наконечники в уши</span></div>
-              <div class="play-line"><span class="play-line-text">me взял головку стетоскопа</span></div>
-              <div class="play-line"><span class="play-line-text">say Поднимайте куртку с футболкой.</span></div>
-              <div class="play-line"><span class="play-line-text">me прислонил головку стетоскопа к груди пациента в районе сердца</span></div>
-              <div class="play-line"><span class="play-line-text">say Поворачивайтесь спиной ко мне.</span></div>
-              <div class="play-line"><span class="play-line-text">me прислонил головку стетоскопа к груди пациента в районе сердца со спины</span></div>
-              <div class="play-line"><span class="play-line-text">do Шумы в сердце обнаружены?</span></div>
-              <div class="play-line"><span class="play-line-text">say Можете одеваться.</span></div>
-              <div class="play-line"><span class="play-line-text">me вытащив ушные наконечники с ушей, повесил стетоскоп на шею</span></div>
-            </div>
-            <div class="play-section">
-              <h4>🍺 Алкотестер <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do В медицинской сумке лежит кейс с прибором "Drager".</span></div>
-              <div class="play-line"><span class="play-line-text">me достал кейс, открыл его и вытащил прибор "Drager"</span></div>
-              <div class="play-line"><span class="play-line-text">say При освидетельствовании будет использован прибор "Drager".</span></div>
-              <div class="play-line"><span class="play-line-text">do На устройстве можно заметить пломбу.</span></div>
-              <div class="play-line"><span class="play-line-text">todo Пломба на приборе присутствует*показав пломбу гражданину</span></div>
-              <div class="play-line"><span class="play-line-text">say Прибор прошел сертификацию, исправен и полностью готов к работе.</span></div>
-              <div class="play-line"><span class="play-line-text">me достал один запечатанный мундштук</span></div>
-              <div class="play-line"><span class="play-line-text">say При Вас вскрываю новый мундштук</span></div>
-              <div class="play-line"><span class="play-line-text">me вскрыл мундштук и вставил в прибор "Drager"</span></div>
-              <div class="play-line"><span class="play-line-text">say Выполним контрольный забор воздуха.</span></div>
-              <div class="play-line"><span class="play-line-text">me выполнил контрольный забор воздуха на приборе</span></div>
-              <div class="play-line"><span class="play-line-text">do Прибор показал результат в 0.0 промилле.</span></div>
-              <div class="play-line"><span class="play-line-text">say Прибор готов к работе. Пожалуйста, дыхните.</span></div>
-              <div class="play-line"><span class="play-line-text">do Прибор показал результат в [x] промилле.</span></div>
-              <div class="play-line"><span class="play-line-text">say Результат — [x] промилле. У вас незначительное/легкое/среднее/сильное опьянение.</span></div>
-            </div>
-          </div>
-        </div>
-      </div></div>
-    </div>
-
-    <!-- SECTION 3 -->
-    <div class="accordion-item">
-      <div class="accordion-header"><div style="display:flex;align-items:center"><span class="section-number">3</span>Обследования</div><span class="accordion-icon">+</span></div>
-      <div class="accordion-content"><div class="content-inner">
-        <div class="submenu">
-          <div class="submenu-header"><span>🦴 Рентген</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Перелом конечности <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">say Снимайте одежду с места возможного перелома.</span></div>
-              <div class="play-line"><span class="play-line-text">do Выключенный рентген-аппарат стоит у стены.</span></div>
-              <div class="play-line"><span class="play-line-text">me нажал кнопку включения аппарата</span></div>
-              <div class="play-line"><span class="play-line-text">do На аппарате лежат защитный жилет и защитная маска.</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв защитный жилет с аппарата, надел на пациента</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв защитную маску с аппарата, надел на пациента</span></div>
-              <div class="play-line"><span class="play-line-text">me нажал кнопку пуск</span></div>
-              <div class="play-line"><span class="play-line-text">say Не шевелитесь, делаю снимок. Больно не будет.</span></div>
-              <div class="play-line"><span class="play-line-text">do Рентген-аппарат сделал снимок.</span></div>
-              <div class="play-line"><span class="play-line-text">me взял в руку снимок</span></div>
-              <div class="play-line"><span class="play-line-text">me повернул снимок на свет</span></div>
-              <div class="play-line"><span class="play-line-text">do Снимок стал разборчив.</span></div>
-              <div class="play-line"><span class="play-line-text">me тщательно рассматривает снимок</span></div>
-              <div class="play-line"><span class="play-line-text">do На снимке имеются признаки перелома?</span></div>
-              <div class="branch-label">Если /do Да:</div>
-              <div class="play-line"><span class="play-line-text">say Что ж, ладно, у Вас тут явный перелом, будем накладывать гипс.</span></div>
-              <div class="branch-label">Если /do Нет:</div>
-              <div class="play-line"><span class="play-line-text">say Отлично, Вам повезло, перелома нет.</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>💓 ЭКГ</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Электрокардиограмма <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">say Здравствуйте, снимайте с себя одежду и ложитесь на кушетку на спину.</span></div>
-              <div class="play-line"><span class="play-line-text">say Процедура займёт от 7 до 10 минут.</span></div>
-              <div class="play-line"><span class="play-line-text">do Электрокардиограф стоит у стены.</span></div>
-              <div class="play-line"><span class="play-line-text">me подкатил электрокардиограф к пациенту</span></div>
-              <div class="play-line"><span class="play-line-text">me взял медицинский спирт со стола и открыл его</span></div>
-              <div class="play-line"><span class="play-line-text">me обезжирил электроды на приборе и поставил спирт на стол</span></div>
-              <div class="play-line"><span class="play-line-text">me взял гель "Синтакт" и смазал электроды</span></div>
-              <div class="play-line"><span class="play-line-text">me прикрепил их к телу пациента</span></div>
-              <div class="play-line"><span class="play-line-text">me подключил электроды к электрокардиографу и включил его</span></div>
-              <div class="play-line"><span class="play-line-text">me запустил электрокардиограф</span></div>
-              <div class="play-line"><span class="play-line-text">do Электрокардиограф записывает график ЭКГ.</span></div>
-              <div class="play-line"><span class="play-line-text">me остановил запись и выключил электрокардиограф</span></div>
-              <div class="play-line"><span class="play-line-text">do Прибор напечатал график.</span></div>
-              <div class="play-line"><span class="play-line-text">me снял электроды с тела пациента и положил их на стол</span></div>
-              <div class="play-line"><span class="play-line-text">me изучил график</span></div>
-              <div class="play-line"><span class="play-line-text">do Имеются ли на графике признаки проблем с сердцем?</span></div>
-              <div class="branch-label">Если /do Да:</div>
-              <div class="play-line"><span class="play-line-text">say У Вас проблемы с сердцем.</span></div>
-              <div class="play-line"><span class="play-line-text">say Обратитесь к своему врачу-терапевту, он Вам выпишет направление.</span></div>
-              <div class="branch-label">Если /do Нет:</div>
-              <div class="play-line"><span class="play-line-text">say Не волнуйтесь, с сердцем у Вас всё хорошо.</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>🧠 КТ / МРТ / ЭЭГ</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Компьютерная томография <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">say Сейчас Вы должны снять с себя все металлические предметы.</span></div>
-              <div class="play-line"><span class="play-line-text">say Они у Вас присутствуют?</span></div>
-              <div class="play-line"><span class="play-line-text">do В углу комнаты стоит готовый аппарат для компьютерной томографии.</span></div>
-              <div class="play-line"><span class="play-line-text">say Ложитесь, пожалуйста, на стол.</span></div>
-              <div class="play-line"><span class="play-line-text">say Не двигайтесь!</span></div>
-              <div class="play-line"><span class="play-line-text">me задвинул стол в прибор</span></div>
-              <div class="play-line"><span class="play-line-text">me включил сканирование на аппарате</span></div>
-              <div class="play-line"><span class="play-line-text">do Аппарат отсканировал пациента.</span></div>
-              <div class="play-line"><span class="play-line-text">me выключил сканирование на аппарате</span></div>
-              <div class="play-line"><span class="play-line-text">do Снимок на мониторе.</span></div>
-              <div class="play-line"><span class="play-line-text">me изучил снимок</span></div>
-              <div class="play-line"><span class="play-line-text">do На снимке имеются отклонения?</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 МРТ <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">say Перед началом процедуры, я расскажу Вам кратко о ней.</span></div>
-              <div class="play-line"><span class="play-line-text">say Сейчас Вы должны снять с себя все металлические предметы.</span></div>
-              <div class="play-line"><span class="play-line-text">do В углу комнаты стоит готовый аппарат МРТ.</span></div>
-              <div class="play-line"><span class="play-line-text">say Ложитесь пожалуйста на стол прибора.</span></div>
-              <div class="play-line"><span class="play-line-text">say Аппарат довольно шумный, я дам Вам наушники.</span></div>
-              <div class="play-line"><span class="play-line-text">me передал наушники человеку напротив</span></div>
-              <div class="play-line"><span class="play-line-text">say Сейчас не двигайтесь, если Вам будет плохо, сообщите.</span></div>
-              <div class="play-line"><span class="play-line-text">me нажал на кнопку аппарата МРТ</span></div>
-              <div class="play-line"><span class="play-line-text">do Стол с пациентом задвинулся в аппарат.</span></div>
-              <div class="play-line"><span class="play-line-text">me нажал на вторую кнопку аппарата МРТ для начала сканирования</span></div>
-              <div class="play-line"><span class="play-line-text">me взглянул на монитор аппарата МРТ</span></div>
-              <div class="play-line"><span class="play-line-text">do На снимке имеются отклонения?</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 ЭЭГ <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">say Садитесь пожалуйста.</span></div>
-              <div class="play-line"><span class="play-line-text">do Возле стены стоит аппарат ЭЭГ.</span></div>
-              <div class="play-line"><span class="play-line-text">me пододвинул аппарат ЭЭГ к койке</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола в руку спирт и электроды ЭЭГ</span></div>
-              <div class="play-line"><span class="play-line-text">me открыв спирт, обработал электроды</span></div>
-              <div class="play-line"><span class="play-line-text">me положил полотенце на голову пациента</span></div>
-              <div class="play-line"><span class="play-line-text">me присоединил электроды к голове пациента</span></div>
-              <div class="play-line"><span class="play-line-text">me подключил электроды к аппарату ЭЭГ</span></div>
-              <div class="play-line"><span class="play-line-text">me нажал кнопку запуска аппарата ЭЭГ</span></div>
-              <div class="play-line"><span class="play-line-text">say Сидите смирно и не подвижно.</span></div>
-              <div class="play-line"><span class="play-line-text">say Глубоко вдохните.</span></div>
-              <div class="play-line"><span class="play-line-text">say Теперь выдохните.</span></div>
-              <div class="play-line"><span class="play-line-text">say Закройте глаза.</span></div>
-              <div class="play-line"><span class="play-line-text">do Аппарат ЭЭГ распечатал энцефалограмму.</span></div>
-              <div class="play-line"><span class="play-line-text">me взял в руки энцефалограмму и начал её изучать</span></div>
-              <div class="play-line"><span class="play-line-text">do Проблемы в работе нервных импульсов головного мозга обнаружены?</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>🔬 УЗИ</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Ультра-звуковое обследование <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">say Снимите всю верхнюю одежду, пожалуйста, и ложитесь на койку.</span></div>
-              <div class="play-line"><span class="play-line-text">do Возле койки стоит аппарат УЗИ.</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола гель и открыл его</span></div>
-              <div class="play-line"><span class="play-line-text">me взял датчик из аппарата УЗИ</span></div>
-              <div class="play-line"><span class="play-line-text">me выдавил гель на датчик аппарата УЗИ</span></div>
-              <div class="play-line"><span class="play-line-text">me включил аппарат УЗИ</span></div>
-              <div class="play-line"><span class="play-line-text">me поводил датчиком по животу</span></div>
-              <div class="play-line"><span class="play-line-text">do Результаты УЗИ на мониторе.</span></div>
-              <div class="play-line"><span class="play-line-text">me изучил результаты</span></div>
-              <div class="play-line"><span class="play-line-text">me закончил осмотр и вернул датчик в аппарат УЗИ</span></div>
-              <div class="play-line"><span class="play-line-text">me взял бумажные полотенца со стола и передал их пациенту</span></div>
-              <div class="play-line"><span class="play-line-text">say Протрите живот.</span></div>
-            </div>
-          </div>
-        </div>
-      </div></div>
-    </div>
-
-    <!-- SECTION 4 -->
-    <div class="accordion-item">
-      <div class="accordion-header"><div style="display:flex;align-items:center"><span class="section-number">4</span>ПМП</div><span class="accordion-icon">+</span></div>
-      <div class="accordion-content"><div class="content-inner">
-        <div class="submenu">
-          <div class="submenu-header"><span>🚑 Приведение в сознание</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Нашатырный спирт <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do В медицинской сумке лежат нашатырный спирт и ватка.</span></div>
-              <div class="play-line"><span class="play-line-text">me достал нашатырный спирт и ватку из медицинской сумки</span></div>
-              <div class="play-line"><span class="play-line-text">me смочил ватку нашатырным спиртом</span></div>
-              <div class="play-line"><span class="play-line-text">me поднёс ватку к носу пострадавшего</span></div>
-              <div class="play-line"><span class="play-line-text">do Человек пришел в чувство?</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>❤️ Массаж сердца / Реанимация</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Непрямой массаж сердца <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">me запрокинул голову пострадавшего</span></div>
-              <div class="play-line"><span class="play-line-text">me снял верхнюю одежду с пострадавшего</span></div>
-              <div class="play-line"><span class="play-line-text">me положив накрест руки на грудь пострадавшего, начал непрямой массаж сердца</span></div>
-              <div class="play-line"><span class="play-line-text">me начал делать искусственное дыхание ''рот в рот'' пострадавшему</span></div>
-              <div class="play-line"><span class="play-line-text">me прислонил голову к лицу пострадавшего</span></div>
-              <div class="play-line"><span class="play-line-text">do Есть ли у пострадавшего дыхание?</span></div>
-              <div class="play-line"><span class="play-line-text">do В медицинской сумке лежит переносной аппарат ЭКГ.</span></div>
-              <div class="play-line"><span class="play-line-text">me достал аппарат ЭКГ из медицинской сумки</span></div>
-              <div class="play-line"><span class="play-line-text">me подключил аппарат ЭКГ к пострадавшему</span></div>
-              <div class="play-line"><span class="play-line-text">do На экране аппарата ЭКГ присутствует фибрилляция желудочков.</span></div>
-              <div class="play-line"><span class="play-line-text">me достал аппарат дефибрилляции из медицинской сумки</span></div>
-              <div class="play-line"><span class="play-line-text">me взял оба дефибриллятора, после чего подготовил их к разряду</span></div>
-              <div class="play-line"><span class="play-line-text">me прижал дефибрилляторы к грудной клетке пострадавшего и нажал на кнопку</span></div>
-              <div class="play-line"><span class="play-line-text">do Дефибрилляторы слегка провибрировали и сделали разряд.</span></div>
-              <div class="play-line"><span class="play-line-text">do Синусовый ритм восстановлен?</span></div>
-              <div class="play-line"><span class="play-line-text">try запустил сердце пострадавшего</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>💉 Аллергический приступ</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Укол от аллергии <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">say На что у вас аллергия? Вы сдавали анализы?</span></div>
-              <div class="play-line"><span class="play-line-text">do В медицинской сумке лежат шприц, антиаллергическое средство в ампуле, спирт и ватка.</span></div>
-              <div class="play-line"><span class="play-line-text">me вытащил из медицинской шприц, антиаллергическое средство в ампуле, спирт и ватку</span></div>
-              <div class="play-line"><span class="play-line-text">me расколол ампулу</span></div>
-              <div class="play-line"><span class="play-line-text">me набирает в шприц содержимое ампулы</span></div>
-              <div class="play-line"><span class="play-line-text">me намочил ватку спиртом</span></div>
-              <div class="play-line"><span class="play-line-text">me нашёл вену на руке пострадавшего</span></div>
-              <div class="play-line"><span class="play-line-text">me протер место укола на вене спиртовой ваткой</span></div>
-              <div class="play-line"><span class="play-line-text">me аккуратно вставил шприц в вену</span></div>
-              <div class="play-line"><span class="play-line-text">me медленно ввёл антиаллергическое средство в вену пострадавшего</span></div>
-              <div class="play-line"><span class="play-line-text">me приложил спиртовую ватку к месту укола</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>🦴 Переломы</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Закрытый перелом <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do В медицинской сумке лежат шина, бинт и холодный компресс.</span></div>
-              <div class="play-line"><span class="play-line-text">me вытащил из медицинской сумки шину и бинт</span></div>
-              <div class="play-line"><span class="play-line-text">me застегнул шину на поврежденной конечности пострадавшего</span></div>
-              <div class="play-line"><span class="play-line-text">me достал из медицинской сумки холодный компресс</span></div>
-              <div class="play-line"><span class="play-line-text">me приложил компресс к поврежденной конечности пострадавшего</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 Открытый перелом <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do В медицинской сумке лежат жгут, вата, спиртовой растрой йода и шина.</span></div>
-              <div class="play-line"><span class="play-line-text">me открыл медицинскую сумку и достал из нее жгут</span></div>
-              <div class="play-line"><span class="play-line-text">me наложил жгут выше раны пострадавшего</span></div>
-              <div class="play-line"><span class="play-line-text">me достал из медицинской сумки вату и спиртовой раствор йода</span></div>
-              <div class="play-line"><span class="play-line-text">me смочил вату йодом</span></div>
-              <div class="play-line"><span class="play-line-text">me обработал рану ваткой</span></div>
-              <div class="play-line"><span class="play-line-text">me вытащил из медицинской сумки шину и бинт</span></div>
-              <div class="play-line"><span class="play-line-text">me застегнул шину на поврежденной конечности пострадавшего</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>🔫 Пулевое ранение</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 ПМП при пулевом <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do В медицинской сумке лежат жгут, шприц с обезболивающим, ватку и медицинский спирт.</span></div>
-              <div class="play-line"><span class="play-line-text">me открыл медицинскую сумку и достал из нее жгут</span></div>
-              <div class="play-line"><span class="play-line-text">me развязав жгут, надел его чуть выше пулевого отверстия</span></div>
-              <div class="play-line"><span class="play-line-text">me затянул ремешок жгута</span></div>
-              <div class="play-line"><span class="play-line-text">do Кровотечение прекратилось?</span></div>
-              <div class="play-line"><span class="play-line-text">me достал из медицинской сумки шприц с обезболивающим, ватку и медицинский спирт</span></div>
-              <div class="play-line"><span class="play-line-text">me открыв медицинский спирт, смочил им ватку</span></div>
-              <div class="play-line"><span class="play-line-text">me протёр на ноге пострадавшего место для будущего укола</span></div>
-              <div class="play-line"><span class="play-line-text">me аккуратно введя иглу в вену, надавил на поршень</span></div>
-              <div class="play-line"><span class="play-line-text">me достал из сумки перекись водорода и стерильную повязку</span></div>
-              <div class="play-line"><span class="play-line-text">me капнул перекисью водорода по краям пулевого отверстия</span></div>
-              <div class="play-line"><span class="play-line-text">me размотав стерильную повязку, наложил её на пулевое отверстие</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>🩸 Потеря пульса</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Проверка пульса <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">me взяв кисть пострадавшего в руку, начал нажимать на артерию пострадавшего</span></div>
-              <div class="play-line"><span class="play-line-text">do Есть ли у пострадавшего пульс?</span></div>
-              <div class="play-line"><span class="play-line-text">do В медицинской сумке лежат лицевая маска и мешок Амбу.</span></div>
-              <div class="play-line"><span class="play-line-text">me достал из медицинской сумки лицевую маску и мешок амбу</span></div>
-              <div class="play-line"><span class="play-line-text">me надел лицевую маску на лицо пострадавшего, после чего надел мешок Амбу на маску</span></div>
-              <div class="play-line"><span class="play-line-text">me скрестив руки на груди пациента, начал выполнять непрямой массаж сердца</span></div>
-              <div class="play-line"><span class="play-line-text">me сделав 30 компрессий, сделал 2 вдоха с помощью мешка Амбу и продолжил выполнять массаж</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span> Сотрясение / Вывих / Ожоги</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Сотрясение мозга <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do В медицинской сумке лежит фонарик.</span></div>
-              <div class="play-line"><span class="play-line-text">me открыл медицинскую сумку и достал из нее фонарик</span></div>
-              <div class="play-line"><span class="play-line-text">me посветил фонариком в глаз пострадавшего</span></div>
-              <div class="play-line"><span class="play-line-text">do Зрачок пациента реагирует на свет?</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 Вывих <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do В медицинской сумке лежат холодный компресс, бинт и шина.</span></div>
-              <div class="play-line"><span class="play-line-text">me открыл медицинскую сумку и достал из нее холодный компресс</span></div>
-              <div class="play-line"><span class="play-line-text">me приложил компресс к месту вывиха пострадавшего</span></div>
-              <div class="play-line"><span class="play-line-text">me аккуратно вправил вывих</span></div>
-              <div class="play-line"><span class="play-line-text">me достал из медицинской сумки бинт</span></div>
-              <div class="play-line"><span class="play-line-text">me наложил повязку на место вывиха</span></div>
-              <div class="play-line"><span class="play-line-text">me вытащил из медицинской сумки шину</span></div>
-              <div class="play-line"><span class="play-line-text">me застегнул шину на поврежденной конечности пострадавшего</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 Ожоги 1-2 степени <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do В медицинской сумке лежат холодный компресс и бинт.</span></div>
-              <div class="play-line"><span class="play-line-text">me открыл медицинскую сумку и достал из нее холодный компресс</span></div>
-              <div class="play-line"><span class="play-line-text">me приложил компресс к месту ожога пострадавшего</span></div>
-              <div class="play-line"><span class="play-line-text">me достал из медицинской сумки бинт</span></div>
-              <div class="play-line"><span class="play-line-text">me наложил повязку на место ожога</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 Ожоги 3-4 степени <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do В медицинской сумке лежат бинт, обезболивающее и бутылка с водой.</span></div>
-              <div class="play-line"><span class="play-line-text">me открыл медицинскую сумку и достал из нее бинт</span></div>
-              <div class="play-line"><span class="play-line-text">me наложил бинт на место ожога</span></div>
-              <div class="play-line"><span class="play-line-text">me достал из медицинской сумки обезболивающее и бутылку с водой</span></div>
-              <div class="play-line"><span class="play-line-text">me передал обезболивающее и бутылку с водой пострадавшему</span></div>
-            </div>
-          </div>
-        </div>
-      </div></div>
-    </div>
-
-    <!-- SECTION 5 -->
-    <div class="accordion-item">
-      <div class="accordion-header"><div style="display:flex;align-items:center"><span class="section-number">5</span>Процедуры</div><span class="accordion-icon">+</span></div>
-      <div class="accordion-content"><div class="content-inner">
-        <div class="submenu">
-          <div class="submenu-header"><span>🦴 Накладывание гипса</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Гипс после рентгена <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">say Что ж, ладно, у Вас тут явный перелом, будем накладывать гипс.</span></div>
-              <div class="play-line"><span class="play-line-text">me отложив снимок на стол, снял жилет с маской и положил их обратно</span></div>
-              <div class="play-line"><span class="play-line-text">do На стене висит дозатор с антисептиком.</span></div>
-              <div class="play-line"><span class="play-line-text">me нанёс антисептик на руки и спешно растёр его</span></div>
-              <div class="play-line"><span class="play-line-text">me вынул из кармана пару стерильных перчаток и натянул их на руки</span></div>
-              <div class="play-line"><span class="play-line-text">me открыл шкаф</span></div>
-              <div class="play-line"><span class="play-line-text">do В шкафу лежат лоток и гипсовый бинт.</span></div>
-              <div class="play-line"><span class="play-line-text">me взял лоток и гипсовый бинт</span></div>
-              <div class="play-line"><span class="play-line-text">me открыв кран, наполнил лоток водой и опустил в него гипсовый бинт</span></div>
-              <div class="play-line"><span class="play-line-text">do Гипс размок.</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв гипсовый бинт, наложил его на травмированную область</span></div>
-              <div class="play-line"><span class="play-line-text">me аккуратными движениями рук сформировал лангету</span></div>
-              <div class="play-line"><span class="play-line-text">do Гипс застыл.</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со столика бинт и укрепил лангету бинтом</span></div>
-              <div class="play-line"><span class="play-line-text">me сдёрнул с рук перчатки и бросил их в урну</span></div>
-              <div class="play-line"><span class="play-line-text">say Что ж, всё, как гипс засохнет, можете быть свободны, через 2 недели приходите на приём.</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>💉 Капельница / Уколы</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Капельница <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do На столе лежат ватка, Хлоргексидин, упакованный катетер и пакеты с препаратом.</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола катетер, ватку и Хлоргексидин</span></div>
-              <div class="play-line"><span class="play-line-text">me опрыснул Хлоргексидином ватку</span></div>
-              <div class="play-line"><span class="play-line-text">me обнаружив вену на руке пациента, протер ваткой место укола</span></div>
-              <div class="play-line"><span class="play-line-text">me вытащив катетер из упаковки, снял защитный колпачок</span></div>
-              <div class="play-line"><span class="play-line-text">me аккуратно ввёл катетер в вену</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола нужный пакет для капельницы</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв штатив в руки, поставил его рядом с пациентом</span></div>
-              <div class="play-line"><span class="play-line-text">me повесил пакет на штатив</span></div>
-              <div class="play-line"><span class="play-line-text">me подключил капельницу к катетеру</span></div>
-              <div class="play-line"><span class="play-line-text">me подрегулировал скорость капельницы</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 Взятие крови из вены <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do На стене висит дозатор с антисептиком.</span></div>
-              <div class="play-line"><span class="play-line-text">me нанёс антисептик на руки и спешно растёр его</span></div>
-              <div class="play-line"><span class="play-line-text">me вынул из кармана перчатки и натянул их на руки</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола жгут</span></div>
-              <div class="play-line"><span class="play-line-text">me завязал жгут на руке пациента</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола ватку и антисептик</span></div>
-              <div class="play-line"><span class="play-line-text">me нанёс антисептик на ватку</span></div>
-              <div class="play-line"><span class="play-line-text">me обработал место укола ваткой</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола шприц</span></div>
-              <div class="play-line"><span class="play-line-text">say Если боитесь крови - отвернитесь.</span></div>
-              <div class="play-line"><span class="play-line-text">me обнаружив вену на руке пациента, уколол в неё шприцом</span></div>
-              <div class="play-line"><span class="play-line-text">me шприцом взял кровь из вены</span></div>
-              <div class="play-line"><span class="play-line-text">me приложил ватку на место укола</span></div>
-              <div class="play-line"><span class="play-line-text">say Держите ватку 4 минуты.</span></div>
-              <div class="play-line"><span class="play-line-text">me перелил кровь из шприца в колбу</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>💉 Вакцинация / COVID</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Тест на коронавирус <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do На стене висит дозатор с антисептиком.</span></div>
-              <div class="play-line"><span class="play-line-text">me нанёс антисептик на руки и спешно растёр его</span></div>
-              <div class="play-line"><span class="play-line-text">me вынул из кармана перчатки и натянул их на руки</span></div>
-              <div class="play-line"><span class="play-line-text">me надел медицинскую маску</span></div>
-              <div class="play-line"><span class="play-line-text">me взял специальный защитный костюм и надел его</span></div>
-              <div class="play-line"><span class="play-line-text">say Сейчас я возьму у Вас мазок, который определит наличие COVID-19.</span></div>
-              <div class="play-line"><span class="play-line-text">me взял в левую руку медицинский шпатель</span></div>
-              <div class="play-line"><span class="play-line-text">me взял в правую руку стерильную палочку с ваткой</span></div>
-              <div class="play-line"><span class="play-line-text">say Откройте, пожалуйста, рот.</span></div>
-              <div class="play-line"><span class="play-line-text">me прижав язык пациента шпателем, ввел палочку в ротовую полость</span></div>
-              <div class="play-line"><span class="play-line-text">me провел тампоном по миндалинам, затем по дужке к язычку</span></div>
-              <div class="play-line"><span class="play-line-text">me вынул тампон из ротовой полости, не касаясь слизистых поверхностей</span></div>
-              <div class="play-line"><span class="play-line-text">me положил ватку в пробирку и закрыл её крышкой</span></div>
-              <div class="play-line"><span class="play-line-text">say Прошу Вас подождать результатов анализа и не покидать палату.</span></div>
-              <div class="play-line"><span class="play-line-text">me нанёс материал с ватки на тест-полоску</span></div>
-              <div class="play-line"><span class="play-line-text">me следит за реакцией на тест-полоске</span></div>
-              <div class="play-line"><span class="play-line-text">do Результат положительный?</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 Вакцинация от коронавируса <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">say Сейчас я поставлю вам прививку от коронавируса.</span></div>
-              <div class="play-line"><span class="play-line-text">do На столе лежат спиртовая салфетка, шприц и ампула с вакциной "Спутник V".</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола спиртовую салфетку и распаковал её</span></div>
-              <div class="play-line"><span class="play-line-text">me протёр место укола спиртовой салфеткой</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола шприц и распаковал его</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола ампулу с вакциной "Спутник V" и открыл её</span></div>
-              <div class="play-line"><span class="play-line-text">me набрал лекарство в шприц</span></div>
-              <div class="play-line"><span class="play-line-text">me ввел шприц под кожу пациента</span></div>
-              <div class="play-line"><span class="play-line-text">me ввёл вакцину</span></div>
-              <div class="play-line"><span class="play-line-text">me вытащил шприц из-под кожи пациента</span></div>
-              <div class="play-line"><span class="play-line-text">me приложил спиртовую салфетку к месту укола</span></div>
-              <div class="play-line"><span class="play-line-text">say Всё готово, если будет температура - примите жаропонижающее средство.</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>🧼 Стерилизация</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Стерилизация инструментов <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do Под столом стоит ведро использованных медицинских инструментов для стерилизации.</span></div>
-              <div class="play-line"><span class="play-line-text">me достав инструменты из ведра, кладет их в раковину</span></div>
-              <div class="play-line"><span class="play-line-text">me открыл кран с водой</span></div>
-              <div class="play-line"><span class="play-line-text">me начал промывать каждый инструмент в проточной воде</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв емкость для стерилизации, налил в неё воду</span></div>
-              <div class="play-line"><span class="play-line-text">me закрыл кран с водой</span></div>
-              <div class="play-line"><span class="play-line-text">me поставил емкость для стерилизации на плитку</span></div>
-              <div class="play-line"><span class="play-line-text">me включил плитку и установил температуру</span></div>
-              <div class="play-line"><span class="play-line-text">do Установлена температура 100 градусов по цельсию.</span></div>
-              <div class="play-line"><span class="play-line-text">do Вода вскипела.</span></div>
-              <div class="play-line"><span class="play-line-text">me положил инструменты в емкость для стерилизации</span></div>
-              <div class="play-line"><span class="play-line-text">me выключив плитку, взял в руки емкость для стерилизации</span></div>
-              <div class="play-line"><span class="play-line-text">me аккуратно вылил кипяток в раковину</span></div>
-              <div class="play-line"><span class="play-line-text">me достал инструменты из емкости</span></div>
-              <div class="play-line"><span class="play-line-text">me убрал инструменты в раствор Хлоргексидина</span></div>
-            </div>
-          </div>
-        </div>
-      </div></div>
-    </div>
-
-    <!-- SECTION 6 -->
-    <div class="accordion-item">
-      <div class="accordion-header"><div style="display:flex;align-items:center"><span class="section-number">6</span>Операции</div><span class="accordion-icon">+</span></div>
-      <div class="accordion-content"><div class="content-inner">
-        <div class="submenu">
-          <div class="submenu-header"><span>👨‍️ Подготовка к операции</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Действия перед каждой операцией <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do У стены стоит закрытый шкаф. Если он отсутствует в кабинете!</span></div>
-              <div class="play-line"><span class="play-line-text">me открыл правую створку шкафа</span></div>
-              <div class="play-line"><span class="play-line-text">do В шкафу лежат хирургическая шапочка с маской.</span></div>
-              <div class="play-line"><span class="play-line-text">me достал из шкафа хирургическую шапочку и маску, поочерёдно надел их на себя</span></div>
-              <div class="play-line"><span class="play-line-text">me поднял вверх рычаг крана и, выдавив из одного дозатора мыло на руку, тщательно помыл руки</span></div>
-              <div class="play-line"><span class="play-line-text">me локтем правой руки закрыл кран и этим же локтем надавил на второй дозатор</span></div>
-              <div class="play-line"><span class="play-line-text">me спешно растёр антисептик по рукам</span></div>
-              <div class="play-line"><span class="play-line-text">me достал из шкафа один комплект хирургического костюма и облачился в него</span></div>
-              <div class="play-line"><span class="play-line-text">me достал из шкафа пару стерильных перчаток и натянул их на руки</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв со стола шланг с маской на конце, присоединил шланг к аппарату для подачи наркоза</span></div>
-              <div class="play-line"><span class="play-line-text">me приложил маску к лицу пациента и нажал второй рукой на кнопку на аппарате</span></div>
-              <div class="play-line"><span class="play-line-text">do Аппарат загудел, по шлангу начал идти препарат Севофлуран.</span></div>
-              <div class="play-line"><span class="play-line-text">me выключив аппарат нажатием на кнопку, снял маску с пациента и повесил её на крючок на стене</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола ларингоскоп и трубку для интубации трахеи</span></div>
-              <div class="play-line"><span class="play-line-text">me ввёл ларингоскоп в ротовую полость пациента и просунул трубку между его лапками</span></div>
-              <div class="play-line"><span class="play-line-text">me отложив ларингоскоп, присоединил к трубке шланг аппарата ИВЛ и нажатием на кнопку включил его</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>🔪 Ножевое / Пулевое</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Ножевое ранение <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do На столе лежат зажим с ваткой, раствор йодоната и 150-ти кубовый шприц.</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв со стола зажим с ваткой, окунул его в раствор йодоната</span></div>
-              <div class="play-line"><span class="play-line-text">me провел несколько раз ваткой по месту ранения и вокруг него</span></div>
-              <div class="play-line"><span class="play-line-text">me выдавил содержимое шприца прямо в рану и отложил его в лоток</span></div>
-              <div class="play-line"><span class="play-line-text">me нажал на кнопку включения кровоотсоса</span></div>
-              <div class="play-line"><span class="play-line-text">me взял шланг кровоотсоса с пластиковой трубочкой на конце</span></div>
-              <div class="play-line"><span class="play-line-text">me ввёл трубочку в место ранения</span></div>
-              <div class="play-line"><span class="play-line-text">me нажал на кнопку выключения кровоотсоса и отложил шланг на место</span></div>
-              <div class="play-line"><span class="play-line-text">me в правую руку взял иглодержатель с заправленной в него иглой и нитью</span></div>
-              <div class="play-line"><span class="play-line-text">me в левую руку взял хирургический пинцет</span></div>
-              <div class="play-line"><span class="play-line-text">me наложил швы на место ранения</span></div>
-              <div class="play-line"><span class="play-line-text">me взял со стола повязку</span></div>
-              <div class="play-line"><span class="play-line-text">me оторвав с повязки защитную плёнку, аккуратно приклеил повязку поверх шва</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 Пулевое ранение <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">me взял скальпель со стола</span></div>
-              <div class="play-line"><span class="play-line-text">me сделал надрез в области ранения</span></div>
-              <div class="play-line"><span class="play-line-text">me взял щипцы со стола</span></div>
-              <div class="play-line"><span class="play-line-text">me начал вытаскивать пулю</span></div>
-              <div class="play-line"><span class="play-line-text">me вытащил пулю</span></div>
-              <div class="play-line"><span class="play-line-text">me наложил швы на место ранения</span></div>
-              <div class="play-line"><span class="play-line-text">me перевязал бинтом часть тела вокруг ранения</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>🦴 Операции на костях</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Удаление аппендицита <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">me взяв скальпель, сделал надрез в районе аппендикса</span></div>
-              <div class="play-line"><span class="play-line-text">me выделил орган аппендикса щипцами</span></div>
-              <div class="play-line"><span class="play-line-text">me удалил скальпелем органа аппендикса</span></div>
-              <div class="play-line"><span class="play-line-text">me наложил швы на место ранения</span></div>
-              <div class="play-line"><span class="play-line-text">me перевязал бинтом место нахождения швов</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 Открытый перелом <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">me взял жгут со стола и наложил его выше места перелома</span></div>
-              <div class="play-line"><span class="play-line-text">me ввёл обезболивающее в место открытого перелома</span></div>
-              <div class="play-line"><span class="play-line-text">me протолкнул кость во внутрь на своё место</span></div>
-              <div class="play-line"><span class="play-line-text">me наложил швы на место ранения</span></div>
-              <div class="play-line"><span class="play-line-text">me взял дрель со стола и подключил её к розетке</span></div>
-              <div class="play-line"><span class="play-line-text">me включил дрель и сделал тонкие прорезы сквозь часть тела</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв шпицы со стола, продел их в часть тела</span></div>
-              <div class="play-line"><span class="play-line-text">me наложил палки и зафиксировал их гайками</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 Перелом позвоночника <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">me взяв скальпель, сделал маленький надрез на спине</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв иглу, вставил иглу в позвоночник</span></div>
-              <div class="play-line"><span class="play-line-text">me зафиксировал иглу в вертикальном положении</span></div>
-              <div class="play-line"><span class="play-line-text">me передвинул аппарат поближе к койке</span></div>
-              <div class="play-line"><span class="play-line-text">me включил аппарат подачи хирургического цемента</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв трубку, подсоединил её к игле</span></div>
-              <div class="play-line"><span class="play-line-text">me нажал на кнопку запуска</span></div>
-              <div class="play-line"><span class="play-line-text">do Бетон залит в позвоночник.</span></div>
-              <div class="play-line"><span class="play-line-text">me выключил аппарат подачи хирургического цемента</span></div>
-              <div class="play-line"><span class="play-line-text">me вытащил иглу из позвоночника</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>❤️ Кардиостимулятор</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Установка кардиостимулятора <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">do На столе лежит упакованный стерилизованный кардиостимулятор.</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв упаковку, открыл её</span></div>
-              <div class="play-line"><span class="play-line-text">me достал кардиостимулятор</span></div>
-              <div class="play-line"><span class="play-line-text">me взяв скальпель, сделал надрез под ключицей</span></div>
-              <div class="play-line"><span class="play-line-text">me сделав надрез в вене, провел электрод в сердце</span></div>
-              <div class="play-line"><span class="play-line-text">me поместил основную часть кардиостимулятора в подкожный карман</span></div>
-              <div class="play-line"><span class="play-line-text">me наложил швы на место ранения</span></div>
-              <div class="play-line"><span class="play-line-text">me оторвав с повязки защитную плёнку, аккуратно приклеил повязку поверх шва</span></div>
-              <div class="play-line"><span class="play-line-text">say Операция прошла успешно.</span></div>
-              <div class="play-line"><span class="play-line-text">say Приходите через 1-2 дня на детальное программирование устройства.</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="submenu">
-          <div class="submenu-header"><span>✅ После операции</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Действия после каждой операции <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">me нажатием на кнопку выключил аппарат ИВЛ и вытащил трубку из трахеи пациента</span></div>
-              <div class="play-line"><span class="play-line-text">do Рядом стоит большая урна для отходов группы Б.</span></div>
-              <div class="play-line"><span class="play-line-text">me сняв с себя всё хирургическое облачение, бросил его в урну под раковиной</span></div>
-            </div>
-          </div>
-        </div>
-      </div></div>
-    </div>
-
-    <!-- SECTION 7 -->
-    <div class="accordion-item">
-      <div class="accordion-header"><div style="display:flex;align-items:center"><span class="section-number">7</span>Выдача мед. карт</div><span class="accordion-icon">+</span></div>
-      <div class="accordion-content"><div class="content-inner">
-        <div class="submenu">
-          <div class="submenu-header"><span>📄 Выдача медицинской карты</span><span class="submenu-icon">+</span></div>
-          <div class="submenu-content">
-            <div class="play-section">
-              <h4>📌 Обычная выдача <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">say Пожалуйста, положите Ваш паспорт на стол в открытом виде.</span></div>
-              <div class="play-line"><span class="play-line-text">me изучил паспорт</span></div>
-              <div class="play-line"><span class="play-line-text">say Перейдем к проверке Вашего психологического состояния.</span></div>
-              <div class="play-line"><span class="play-line-text">say Что такое DM?</span></div>
-              <div class="play-line"><span class="play-line-text">say Присядьте</span></div>
-              <div class="play-line"><span class="play-line-text">say Вставайте, перейдем к следующему этапу.</span></div>
-              <div class="play-line"><span class="play-line-text">say Вставайте</span></div>
-              <div class="play-line"><span class="play-line-text">do Компьютер напротив включён.</span></div>
-              <div class="play-line"><span class="play-line-text">do На компьютере запущена медицинская база.</span></div>
-              <div class="play-line"><span class="play-line-text">me начал искать медицинскую карту гражданина в медицинской базе</span></div>
-              <div class="play-line"><span class="play-line-text">do Рядом с компьютером стоит принтер.</span></div>
-              <div class="play-line"><span class="play-line-text">me нашёл медицинскую карту гражданина и отправил её на печать</span></div>
-              <div class="play-line"><span class="play-line-text">do Принтер напечатал медицинскую карту.</span></div>
-              <div class="play-line"><span class="play-line-text">me взял из принтера медицинскую карту</span></div>
-              <div class="play-line"><span class="play-line-text">todo Держите, Ваша медицинская карта *передав медицинскую карту человеку напротив</span></div>
-              <div class="play-line"><span class="play-line-text">say Не забудьте забрать свой паспорт.</span></div>
-            </div>
-            <div class="play-section">
-              <h4>📌 С удостоверением <button class="copy-all-btn">📋 Копировать всё</button></h4>
-              <div class="play-line"><span class="play-line-text">say Пожалуйста, положите Ваш паспорт на стол в открытом виде и покажите удостоверение.</span></div>
-              <div class="play-line"><span class="play-line-text">me изучил паспорт и удостоверение</span></div>
-              <div class="play-line"><span class="play-line-text">do Компьютер напротив включён.</span></div>
-              <div class="play-line"><span class="play-line-text">do На компьютере запущена медицинская база.</span></div>
-              <div class="play-line"><span class="play-line-text">me начал искать медицинскую карту гражданина в медицинской базе</span></div>
-              <div class="play-line"><span class="play-line-text">do Рядом с компьютером стоит принтер.</span></div>
-              <div class="play-line"><span class="play-line-text">me нашёл медицинскую карту гражданина и отправил её на печать</span></div>
-              <div class="play-line"><span class="play-line-text">do Принтер напечатал медицинскую карту.</span></div>
-              <div class="play-line"><span class="play-line-text">me взял из принтера медицинскую карту</span></div>
-              <div class="play-line"><span class="play-line-text">todo Держите, Ваша медицинская карта*передав медицинскую карту человеку напротив</span></div>
-              <div class="play-line"><span class="play-line-text">say Не забудьте забрать свой паспорт.</span></div>
-            </div>
-          </div>
-        </div>
-      </div></div>
-    </div>
-  </div>
-</div>
-
-<div class="notification" id="notification">✅ Скопировано!</div>
-
-<script>
-// === THEME TOGGLE ===
-const themeToggle = document.getElementById('themeToggle');
-const storedTheme = localStorage.getItem('theme') || 'dark';
-document.body.dataset.theme = storedTheme;
-updateThemeIcon(storedTheme);
-
-themeToggle.addEventListener('click', () => {
-  const current = document.body.dataset.theme;
-  const next = current === 'dark' ? 'light' : 'dark';
-  document.body.dataset.theme = next;
-  localStorage.setItem('theme', next);
-  updateThemeIcon(next);
-});
-
-function updateThemeIcon(theme) {
-  themeToggle.textContent = theme === 'dark' ? '☀️' : '🌙';
-}
-
-// === ACCORDION & SUBMENU LOGIC ===
-document.addEventListener('click', (e) => {
-  const header = e.target.closest('.accordion-header, .submenu-header');
-  if (!header) return;
-
-  const content = header.nextElementSibling;
-  const isActive = header.classList.contains('active');
-  const isAccordion = header.classList.contains('accordion-header');
-  
-  // Close siblings
-  const parent = isAccordion ? document.querySelector('.accordion') : header.parentElement;
-  const targets = isAccordion ? '.accordion-content, .submenu-content' : '.submenu-content';
-  const headers = isAccordion ? '.accordion-header' : '.submenu-header';
-  
-  parent.querySelectorAll(targets).forEach(c => {
-    if(c !== content) {
-      c.classList.remove('active');
-      c.style.maxHeight = '0';
-    }
-  });
-  parent.querySelectorAll(headers).forEach(h => {
-    if(h !== header) h.classList.remove('active');
-  });
-
-  // Toggle current
-  if (!isActive) {
-    header.classList.add('active');
-    content.classList.add('active');
-    content.style.maxHeight = content.scrollHeight + 'px';
-  } else {
-    header.classList.remove('active');
-    content.classList.remove('active');
-    content.style.maxHeight = '0';
-  }
-});
-
-// === COPY LOGIC ===
-document.addEventListener('click', (e) => {
-  const textEl = e.target.closest('.play-line-text');
-  if (textEl) {
-    copyText(textEl.textContent.trim(), textEl);
-    return;
-  }
-
-  const copyAllBtn = e.target.closest('.copy-all-btn');
-  if (copyAllBtn) {
-    e.stopPropagation();
-    const section = copyAllBtn.closest('.play-section');
-    const lines = Array.from(section.querySelectorAll('.play-line-text'))
-      .map(el => el.textContent.trim())
-      .filter(t => t)
-      .join('\n');
-    copyText(lines, copyAllBtn, '📋 Весь блок скопирован!');
-  }
-});
-
-function copyText(text, element, successMsg = '✅ Скопировано!') {
-  navigator.clipboard.writeText(text).then(() => {
-    element.classList.add('copied');
-    showNotification(successMsg);
-    setTimeout(() => element.classList.remove('copied'), 800);
-  }).catch(() => {
-    const ta = document.createElement('textarea');
-    ta.value = text;
-    document.body.appendChild(ta);
-    ta.select();
-    document.execCommand('copy');
-    document.body.removeChild(ta);
-    element.classList.add('copied');
-    showNotification(successMsg);
-    setTimeout(() => element.classList.remove('copied'), 800);
-  });
-}
-
-function showNotification(msg) {
-  const n = document.getElementById('notification');
-  n.textContent = msg;
-  n.style.display = 'block';
-  clearTimeout(n.timeout);
-  n.timeout = setTimeout(() => n.style.display = 'none', 1500);
-}
-
-// === SMART SEARCH ===
-const searchInput = document.getElementById('searchInput');
-searchInput.addEventListener('input', (e) => {
-  const term = e.target.value.toLowerCase().trim();
-  const allSections = document.querySelectorAll('.play-section');
-  
-  if (!term) {
-    allSections.forEach(s => s.style.display = '');
-    document.querySelectorAll('.accordion-content, .submenu-content').forEach(c => {
-      c.style.maxHeight = '0';
-      c.classList.remove('active');
-    });
-    document.querySelectorAll('.accordion-header, .submenu-header').forEach(h => h.classList.remove('active'));
-    return;
-  }
-
-  allSections.forEach(section => {
-    const match = section.textContent.toLowerCase().includes(term);
-    section.style.display = match ? '' : 'none';
+  <div class="container">
+    <h1>📻 Помощник по докладам</h1>
+    <p class="subtitle">Заполните поля сверху → текст докладов обновится автоматически → нажмите «Копировать»</p>
     
-    if (match) {
-      let parent = section.closest('.submenu-content') || section.closest('.accordion-content');
-      while (parent) {
-        const header = parent.previousElementSibling;
-        if (header && (header.classList.contains('submenu-header') || header.classList.contains('accordion-header'))) {
-          header.classList.add('active');
-          parent.classList.add('active');
-          parent.style.maxHeight = parent.scrollHeight + 'px';
+    <div class="settings" id="settingsPanel"></div>
+    <div id="reportsContainer"></div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'rp_radio_helper_v1';
+    let settings = JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+
+    const settingsConfig = [
+      { id: 'tag', label: 'Отделение / Тег', type: 'text', default: 'ЦЭМП' },
+      { id: 'partner', label: 'Напарник (оставьте пустым, если нет)', type: 'text', default: '' },
+      { id: 'callId', label: 'ID вызова', type: 'text', default: 'id' },
+      { id: 'minutes', label: 'Время перерыва (мин)', type: 'number', default: '15' },
+      { id: 'postNum', label: 'Номер поста СМП', type: 'number', default: '5' },
+      { id: 'buildLoc', label: 'Место построения', type: 'select', options: ['крыше', 'парковке'], default: 'крыше' },
+      { id: 'buildMin', label: 'Время готовности (мин)', type: 'number', default: '5' },
+      { id: 'jurFrom', label: 'Юрисдикция (от)', type: 'select', options: ['ЦГБ-П'], default: 'ЦГБ-П' },
+      { id: 'jurTo', label: 'Юрисдикция (к)', type: 'select', options: ['ОКБ', 'ЦГБ-Н', 'МЗ'], default: 'ОКБ' },
+      { id: 'crossPurpose', label: 'Цель пересечения', type: 'select', options: ['обработки вызова', 'запроса'], default: 'обработки вызова' },
+      { id: 'vehicle', label: 'Тип транспорта', type: 'select', options: ['АСМП', 'ВСМП'], default: 'АСМП' },
+      { id: 'dept', label: 'Отдел построения', type: 'select', options: ['сотрудников КДЛ', 'сотрудников ЭКЦ «Гармония»', 'сотрудников ЦЭМП', 'сотрудников ИПК'], default: 'сотрудников ЦЭМП' }
+    ];
+
+    const reportsData = [
+      { category: "О заступлении/сдачи смены", items: ["r {{TAG}}, заступил на смену.", "r {{TAG}}, сдал смену."] },
+      { category: "Перерывы", items: ["r {{TAG}}, разрешите взять перерыв на {{MINUTES}} минут?", "r {{TAG}}, взял обеденный перерыв.", "r {{TAG}}, вернулся с перерыва."] },
+      { category: "Об обработке вызова", items: ["r {{TAG}}, принял вызов №{{CALL_ID}}. Напарник: {{PARTNER}}.", "r {{TAG}}, вызов №{{CALL_ID}} выполнен. Госпитализация. Напарник: {{PARTNER}}.", "r {{TAG}}, вызов №{{CALL_ID}} выполнен на месте. Возвращаемся. Напарник: {{PARTNER}}.", "r {{TAG}}, вызов №{{CALL_ID}} ложный. Возвращаемся. Напарник: {{PARTNER}}.", "r {{TAG}}, вызов №{{CALL_ID}} отменён. Возвращаемся. Напарник: {{PARTNER}}.", "r {{TAG}}, вызов завершён. На базе. Напарник: {{PARTNER}}."] },
+      { category: "При патруле", items: ["r {{TAG}}, выехал в патруль юрисдикции. Напарник: {{PARTNER}}.", "r {{TAG}}, продолжаю патруль юрисдикции. Напарник: {{PARTNER}}.", "r {{TAG}}, заканчиваю патруль юрисдикции. На базе. Напарник: {{PARTNER}}."] },
+      { category: "На посту", items: ["r {{TAG}}, выехал на пост СМП №{{POST_NUM}}. Напарник: {{PARTNER}}.", "r {{TAG}}, прибыл на пост СМП №{{POST_NUM}}. ЧП не выявлено. Напарник: {{PARTNER}}.", "r {{TAG}}, продолжаю дежурство на посту СМП №{{POST_NUM}}. ЧП не выявлено. Напарник: {{PARTNER}}.", "r {{TAG}}, заканчиваю дежурство на посту СМП №{{POST_NUM}}. Возвращаюсь на базу. Напарник: {{PARTNER}}.", "r {{TAG}}, пост СМП №{{POST_NUM}}. На базе. Напарник: {{PARTNER}}."] },
+      { category: "О пересечении территории", items: ["ro [{{JUR_FROM}}] к [{{JUR_TO}}] Пересекаю границу Вашей юрисдикции для {{CROSS_PURPOSE}}.", "ro [{{JUR_FROM}}] к [{{JUR_TO}}/МЗ] Разрешите патрулирование Вашей юрисдикции на {{VEHICLE}}."] },
+      { category: "Блок для Руководящего состава", items: ["r {{TAG}} | Объявлено всеобщее построение состава на {{BUILD_LOC}} больницы. Готовность {{BUILD_MIN}} минут.", "r {{TAG}} | Всеобщее построение состава на {{BUILD_LOC}} больницы.", "r {{TAG}} | Объявлено построение {{DEPT}} на {{BUILD_LOC}} больницы. Готовность {{BUILD_MIN}} минут.", "r {{TAG}} | Построение {{DEPT}} на {{BUILD_LOC}} больницы."] },
+      { category: "ВСМП", items: ["r {{TAG}}, ВСМП. Вылетаем для патрулирования юрисдикции. Напарник: {{PARTNER}}.", "r {{TAG}}, ВСМП. Продолжаем патрулирование юрисдикции. Напарник: {{PARTNER}}.", "r {{TAG}}, ВСМП. Заканчиваем патрулирование юрисдикции. На базе. Напарник: {{PARTNER}}."] },
+      { category: "Служебный ПАЗ", items: ["r {{TAG}}, взял служебный ПАЗ в рабочих целях.", "r {{TAG}}, вернул служебный ПАЗ на парковку."] }
+    ];
+
+    function getSettings() { return settings; }
+    function saveSettings() { localStorage.setItem(STORAGE_KEY, JSON.stringify(settings)); renderReports(); }
+
+    function renderSettings() {
+      document.getElementById('settingsPanel').innerHTML = settingsConfig.map(cfg => {
+        let input = '';
+        if (cfg.type === 'select') {
+          input = `<select onchange="updateSetting('${cfg.id}', this.value)">
+            ${cfg.options.map(o => `<option value="${o}" ${settings[cfg.id]===o?'selected':''}>${o}</option>`).join('')}
+          </select>`;
+        } else {
+          input = `<input type="${cfg.type}" value="${settings[cfg.id]}" oninput="updateSetting('${cfg.id}', this.value)" placeholder="${cfg.default}">`;
         }
-        parent = parent.parentElement.closest('.submenu-content, .accordion-content');
-      }
+        return `<div class="setting-group"><label>${cfg.label}</label>${input}</div>`;
+      }).join('');
     }
-  });
-});
-</script>
+
+    function updateSetting(id, val) { settings[id] = val; saveSettings(); }
+
+    function processTemplate(template) {
+      const s = getSettings();
+      let text = template;
+      if (!s.partner.trim()) {
+        text = text.replace(/ Напарник: \{\{PARTNER\}\}\./g, '');
+      } else {
+        text = text.replaceAll('{{PARTNER}}', s.partner);
+      }
+      const reps = {'{{TAG}}':s.tag,'{{CALL_ID}}':s.callId,'{{MINUTES}}':s.minutes,'{{POST_NUM}}':s.postNum,'{{BUILD_LOC}}':s.buildLoc,'{{BUILD_MIN}}':s.buildMin,'{{JUR_FROM}}':s.jurFrom,'{{JUR_TO}}':s.jurTo,'{{CROSS_PURPOSE}}':s.crossPurpose,'{{VEHICLE}}':s.vehicle,'{{DEPT}}':s.dept};
+      for(let k in reps) text = text.replaceAll(k, reps[k] || '');
+      return text.replace(/  +/g,' ').replace(/\s+\./g,'.').replace(/\.\./g,'.').trim();
+    }
+
+    function renderReports() {
+      document.getElementById('reportsContainer').innerHTML = reportsData.map(sec => `
+        <div class="section">
+          <div class="section-title">${sec.category}</div>
+          ${sec.items.map((tpl, i) => {
+            const id = `r_${sec.category.replace(/\s/g,'_')}_${i}`;
+            return `<div class="report-item"><div class="report-text" id="${id}">${processTemplate(tpl)}</div><button class="copy-btn" onclick="copyToClipboard('${id}', this)">Копировать</button></div>`;
+          }).join('')}
+        </div>
+      `).join('');
+    }
+
+    function copyToClipboard(id, btn) {
+      const text = document.getElementById(id).innerText;
+      const fallback = () => { const t=document.createElement('textarea'); t.value=text; document.body.appendChild(t); t.select(); document.execCommand('copy'); document.body.removeChild(t); };
+      (navigator.clipboard ? navigator.clipboard.writeText(text).catch(fallback) : fallback()).then(() => {
+        btn.classList.add('copied'); btn.textContent = '✓ Скопировано';
+        setTimeout(() => { btn.classList.remove('copied'); btn.textContent = 'Копировать'; }, 1200);
+      });
+    }
+
+    // Init
+    settingsConfig.forEach(c => { if(settings[c.id]===undefined) settings[c.id]=c.default; });
+    renderSettings(); renderReports();
+  </script>
 </body>
 </html>
